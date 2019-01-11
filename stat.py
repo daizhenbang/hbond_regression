@@ -30,17 +30,20 @@ font = {'family' : 'normal',
 
 matplotlib.rc('font', **font)
       
-dft = readData('dft.txt');      
-deviations = readData('allDeviations.txt');
-ewald = readData('ewald.txt');
-nHBond = readData('allHBondStrength.txt')
-bv = readData('ave_std_edge.txt');
-allGlazer = readData('glazer.txt');
-tilting = readData('tiltingAngle.txt');
-tiltingSquare = readData('tiltingAngleSquare.txt');
-poles = readData('poles_coupling_charge_center.txt');
-p4 = np.reshape(allGlazer[:,1],[200,1]);
-dd = np.reshape(allGlazer[:,1],[200,1]);
+dft = readData('./data/dft.txt');      
+deviations = readData('./data/allDeviations.txt');
+ewald = readData('./data/ewald.txt');
+nHBond = readData('./data/allHBondStrength.txt')
+bv = readData('./data/ave_std_edge.txt');
+NIcoupling = readData('./data/NI_coupling.txt');
+OIcoupling = readData('./data/OI_coupling.txt');
+moleCoupling = readData('./data/mole_coupling.txt');
+#allGlazer = readData('./data/glazer.txt');
+#tilting = readData('./data/tiltingAngle.txt');
+#tiltingSquare = readData('./data/tiltingAngleSquare.txt');
+#poles = readData('./data/poles_coupling_charge_center.txt');
+#p4 = np.reshape(allGlazer[:,1],[200,1]);
+#dd = np.reshape(allGlazer[:,1],[200,1]);
 
 '''Plot these quantities'''
 #fig = plt.figure(figsize=(10,8));
@@ -57,31 +60,35 @@ dd = np.reshape(allGlazer[:,1],[200,1]);
 
 X = np.concatenate([deviations,\
                     nHBond,\
+                    OIcoupling,\
+                    NIcoupling,\
+                    moleCoupling,\
+                    ewald\
                     ],axis=1);
 allData = np.concatenate([X,dft],axis = 1);
 #
 '''Plot with Seaborn'''
-sns.set(style="white")
-
-# Generate a large random dataset
-d = pd.DataFrame(data=allData);
-
-# Compute the correlation matrix
-corr = d.corr()
-
-# Generate a mask for the upper triangle
-mask = np.zeros_like(corr, dtype=np.bool)
-mask[np.triu_indices_from(mask)] = True
-
-# Set up the matplotlib figure
-f, ax = plt.subplots(figsize=(11, 9))
-
-# Generate a custom diverging colormap
-cmap = sns.diverging_palette(220, 10, as_cmap=True)
-
-# Draw the heatmap with the mask and correct aspect ratio
-sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
-            square=True, linewidths=.5, cbar_kws={"shrink": .5})
+#sns.set(style="white")
+#
+## Generate a large random dataset
+#d = pd.DataFrame(data=allData);
+#
+## Compute the correlation matrix
+#corr = d.corr()
+#
+## Generate a mask for the upper triangle
+#mask = np.zeros_like(corr, dtype=np.bool)
+#mask[np.triu_indices_from(mask)] = True
+#
+## Set up the matplotlib figure
+#f, ax = plt.subplots(figsize=(11, 9))
+#
+## Generate a custom diverging colormap
+#cmap = sns.diverging_palette(220, 10, as_cmap=True)
+#
+## Draw the heatmap with the mask and correct aspect ratio
+#sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
+#            square=True, linewidths=.5, cbar_kws={"shrink": .5})
 
 
 ''''''
