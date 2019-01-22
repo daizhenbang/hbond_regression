@@ -39,15 +39,24 @@ NIcoupling = readData('./data/NI_coupling.txt');
 OIcoupling = readData('./data/OI_coupling.txt');
 NHighSymCoupling = readData('./data/NHightSymCoupling.txt');
 moleCoupling = readData('./data/mole_coupling.txt');
+
+'''LJ temrs'''
 LJall = readData('./data/LJterms_allCl.txt');
+LJ_C_all = readData('./data/LJterms_C_allCl.txt');
 LJ3Cl = readData('./data/LJterms_3Cl.txt');
+LJterms_C_6power = readData('./data/LJterms_C_6power.txt');
+LJterms_C_12power = readData('./data/LJterms_C_12power.txt');
+LJterms_allMolecule = readData('./data/LJterms_allMolecule.txt');
+
 NHighSym_2power = readData('./data/NHighSym_2power.txt');
 NHighSym_4power = readData('./data/NHighSym_4power.txt');
+
 #allGlazer = readData('./data/glazer.txt');
 #tilting = readData('./data/tiltingAngle.txt');
 #tiltingSquare = readData('./data/tiltingAngleSquare.txt');
 #poles = readData('./data/poles_coupling_charge_center.txt');
-#p4 = np.reshape(allGlazer[:,1],[200,1]);
+p2 = readData('./data/molecule_squared.txt');
+p4 = readData('./data/molecule_power4.txt');
 #dd = np.reshape(allGlazer[:,1],[200,1]);
 
 '''Plot these quantities'''
@@ -71,11 +80,16 @@ NHighSym_4power = readData('./data/NHighSym_4power.txt');
 #                    ewald\
 #                    ],axis=1);
 
-X = np.concatenate([LJall,\
-                    NHighSym_2power,\
-                    NHighSym_4power,\
-                    moleCoupling,\
-                    NHighSymCoupling\
+X = np.concatenate([\
+                    LJterms_allMolecule,\
+#                    p2,\
+                    p4,\
+                    ewald,\
+                    deviations,\
+#                    NHighSym_2power,\
+#                    NHighSym_4power,\
+#                    NHighSymCoupling,\
+#                    moleCoupling\
                     ],axis=1);
 
 allData = np.concatenate([X,dft],axis = 1);
