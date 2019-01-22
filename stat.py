@@ -82,7 +82,7 @@ p4 = readData('./data/molecule_power4.txt');
 
 X = np.concatenate([\
                     LJterms_allMolecule,\
-#                    p2,\
+                    p2,\
                     p4,\
                     ewald,\
                     deviations,\
