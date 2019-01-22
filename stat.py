@@ -37,7 +37,12 @@ nHBond = readData('./data/allHBondStrength.txt')
 bv = readData('./data/ave_std_edge.txt');
 NIcoupling = readData('./data/NI_coupling.txt');
 OIcoupling = readData('./data/OI_coupling.txt');
+NHighSymCoupling = readData('./data/NHightSymCoupling.txt');
 moleCoupling = readData('./data/mole_coupling.txt');
+LJall = readData('./data/LJterms_allCl.txt');
+LJ3Cl = readData('./data/LJterms_3Cl.txt');
+NHighSym_2power = readData('./data/NHighSym_2power.txt');
+NHighSym_4power = readData('./data/NHighSym_4power.txt');
 #allGlazer = readData('./data/glazer.txt');
 #tilting = readData('./data/tiltingAngle.txt');
 #tiltingSquare = readData('./data/tiltingAngleSquare.txt');
@@ -58,20 +63,33 @@ moleCoupling = readData('./data/mole_coupling.txt');
 
 '''Correlation'''
 
-X = np.concatenate([deviations,\
-                    nHBond,\
-                    OIcoupling,\
-                    NIcoupling,\
+#X = np.concatenate([deviations,\
+#                    nHBond,\
+#                    OIcoupling,\
+#                    NIcoupling,\
+#                    moleCoupling,\
+#                    ewald\
+#                    ],axis=1);
+
+X = np.concatenate([LJall,\
+                    NHighSym_2power,\
+                    NHighSym_4power,\
                     moleCoupling,\
-                    ewald\
+                    NHighSymCoupling\
                     ],axis=1);
+
 allData = np.concatenate([X,dft],axis = 1);
 #
 '''Plot with Seaborn'''
-#sns.set(style="white")
-#
-## Generate a large random dataset
-#d = pd.DataFrame(data=allData);
+
+
+sns.set(style="white")
+
+# Generate a large random dataset
+#label = ['Deviation','#HBond','OI','NI','Molecules coupling','Ewald','DFT'];
+#label = ['Deviation','NI','Molecules coupling','DFT'];
+#label = ['6HCl','12HCl','6NCl','12NCl','d^2','d^4','DFT'];
+#d = pd.DataFrame(data=allData,columns=label);
 #
 ## Compute the correlation matrix
 #corr = d.corr()
@@ -81,7 +99,7 @@ allData = np.concatenate([X,dft],axis = 1);
 #mask[np.triu_indices_from(mask)] = True
 #
 ## Set up the matplotlib figure
-#f, ax = plt.subplots(figsize=(11, 9))
+#f, ax = plt.subplots(figsize=(11, 9));
 #
 ## Generate a custom diverging colormap
 #cmap = sns.diverging_palette(220, 10, as_cmap=True)
@@ -90,7 +108,7 @@ allData = np.concatenate([X,dft],axis = 1);
 #sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
 #            square=True, linewidths=.5, cbar_kws={"shrink": .5})
 
-
+#f.savefig('Correlation_selected.png')
 ''''''
 
 dft = (dft - np.min(dft))*13.6*1000;
@@ -135,16 +153,26 @@ dft = allData[:,-1];
 ''''''
 
 '''Linear Regression'''
+'''Setup the fontsize'''
+font = {'family' : 'normal',
+        'weight' : 'bold',
+        'size'   : 20}
+
+matplotlib.rc('font', **font)
+''''''
+
 regressor = LinearRegression();
 dftE = dft;
 
 regressor.fit(X,dftE);
 predE = regressor.predict(X);
 
-fig = plt.figure(1);
+fig = plt.figure(1,figsize=(10,8));
 plt.plot(dftE,dftE);
 plt.scatter(dftE,predE,marker='.');
-
+plt.xlabel('DFT Energy(meV/Structure)',fontsize=20);
+plt.ylabel('Predicted Energy(meV/Structure)',fontsize=20);
+#fig.savefig('Regression_selected.png')
 print(regressor.coef_);
 print(regressor.score(X,dftE));
 ''''''
